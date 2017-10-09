@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>RPS Multiplayer</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="assets/javascript/login.js"></script>
+    <script src="assets/javascript/game.js"></script>
+    <script src="assets/javascript/chat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.1/firebase.js"></script>
+</head>
+<body>
+
+
+  <div class="container">
+
+    <br>
+
+    <!-- Jumbotron -->
+    <div class="jumbotron">
+      <h1 class="text-center">Rock Paper Scissors </h1>
+    </div>
+   
+    <div class="row">
+<!-- Most Recent Member Panel -->
+        <div class="col-lg-12 col-lg-offset-5">
+       	  <input id="add-player" type="text" placeholder="name" class="text-center">
+       	  <button id="submit" value="submit">Submit</button>
+        </div>
+	</div>
+	    <div class="row">
+	    	<div class='col-md-4'>
+	    	<div id="player1" class="player"> Waiting for Player 1</div>
+	    	</div>
+	    	<div class='col-md-4'>
+	    		<div id="result" class="player"> Winner </div>
+	    	</div>
+	    	<div class='col-md-4'>
+	    		<div id="player2" class="player">Waiting for Player 2</div>
+	    	</div>
+
+	    </div>
+
+	    <div class="row">
+	    </div>
+
+
+</div>
+
+<script>
+
+  var config = {
+    apiKey: "AIzaSyB_DKm5hWrvC0wY5bzspNeAjZCjvu3TcdI",
+    authDomain: "multiplayergamerps.firebaseapp.com",
+    databaseURL: "https://multiplayergamerps.firebaseio.com",
+    projectId: "multiplayergamerps",
+    storageBucket: "",
+    messagingSenderId: "194144422802"
+  };
+  firebase.initializeApp(config);
+
+
+
+  var database = firebase.database();
+
+  var count = 0;
+
+
+  function submitCreateAccount(){
+
+  		var displayName = $("#add-player").val().trim();
+  		count++;
+
+  		 database.ref("/players").push({
+  		 	displayName:displayName,
+  		 	userId: count
+
+  		 });
+
+  		 if(count === 2)
+  		 	count = 0;
+
+  }
+
+  function displayName(){
+  		database.ref("/players").on("child_added", function(snapshot) {
+
+
+  			var player = snapshot.val().displayName;
+  		
+
+
+  			console.log(snapshot.val().displayName);
+
+  			if(snapshot.val().userId === 1)
+  				$("#player1").html(player)
+  			else
+  				$("#player2").html(player)	
+
+  		})
+
+  }
+
+
+  $("body").on("click", "#submit", function(){
+  		submitCreateAccount();
+  		displayName();
+
+  })
+</script>
+
+</body>
+</html>
