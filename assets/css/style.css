@@ -3,4 +3,14 @@
 	min-height: 300px;
 	border: 2px black;
 	background-color: lightblue;
+	text-align: center;
+}
+
+.winner{
+	
+	min-height: 300px;
+	border: 2px black;
+	background-color: lightgreen;
+	text-align: center;
+
 }
