@@ -19,20 +19,7 @@
 
   //info/connected returns a boolean to see if a client is connected to database
   var connectedRef = database.ref(".info/connected");
-
   var playersRef = database.ref("/playersRef");
-  var players = database.ref().child("/players");
-  var count = 0;
-
-
-  var player1 = "waiting for player 1";
-  var player2 = "waiting for player 2";
-
-  var wins1   = 0;
-  var losses1 = 0;
-  var wins2   = 0;
-  var losses2 = 0;
-
 
   var choice = ["Rock", "Paper", "Scissors"];
 
@@ -40,72 +27,100 @@
 
 //create input text field and append to playerNames div
 var input = $("<input id=playerName type=text placeholder=Name>");
-$("#playerNames").append(input);
+$("#inputPlayer").append(input);
 
 
 var button = $("<button id=addPlayer value=submit type=submit>Submit</button>");
 button.addClass("btn btn-primary btn-default");
-$("#playerNames").append(button);
+
+
+$("#inputPlayer").append(button);
 
 
 
 
 
-$('body').on('click', '#addPlayer', function(){
+$('body').on("click", "#addPlayer", function(){
 
 
-    connectionsRef.once("value", function(snapshot){
+connectionsRef.once("value", function(snapshot){
 
-        console.log("line 64 " + snapshot.numChildren());
+    if(snapshot.numChildren() === 1){
+          database.ref('/playersRef/' + snapshot.numChildren()).set({
+              player1: $("#playerName").val(),
+              wins: 0,
+              losses: 0
 
-        //when only one player/client is connected
-        if(snapshot.numChildren() === 1){
-          // var con = connectionsRef.push(true);
-          database.ref("/playersRef/" + snapshot.numChildren()).set({
-            
-                 player1: $("#playerName").val(),
-                 wins: 0,
-                 losses: 0
-          
-               });
-
-          var player1 = playersRef.child(1);
-          console.log("Player 1" + player1);
-
-        
-
-          player1.onDisconnect().remove();
-           $("#playerName").remove();
-           $('#addPlayer').remove();
-
-        }
+          })
 
 
-        else if(snapshot.numChildren() === 2){
-           // var con = connectionsRef.push(true);
-           database.ref("/playersRef/" + snapshot.numChildren()).set({
-            
-                 player2: $("#playerName").val(),
-                 wins: 0,
-                 losses: 0
-          
-               });
-          
-           var player2 = playersRef.child(2);
-           console.log("Player 2" + player2);
-           player2.onDisconnect().remove();
+    database.ref('/playersRef/' + snapshot.numChildren()).onDisconnect().remove();
 
-           $("#playerName").remove();
-           $('#addPlayer').remove();
-           
-        }
+    }
 
+   if(snapshot.numChildren() === 2){
+          database.ref('/playersRef/' + snapshot.numChildren()).set({
+              player2: $("#playerName").val(),
+              wins: 0,
+              losses: 0
 
+          })
 
-    })
+    database.ref('/playersRef/' + snapshot.numChildren()).onDisconnect().remove();
 
-displayName();
+    }
 })
+
+})
+
+
+
+
+playersRef.on("child_added", function(childsnapshot){
+
+
+var key = childsnapshot.key;
+
+console.log("Line 81 Key: "+ key);
+
+if(key === '1'){
+      var player1 = {};
+
+      player1.name = childsnapshot.val().player1;
+      player1.wins = childsnapshot.val().wins;
+      player1.losses = childsnapshot.val().losses;
+
+
+
+      console.log("player1 name " + player1.name);
+      console.log("player1 name " + player1.wins);
+      console.log("player1 name " + player1.losses);
+
+       //update html with the playerName
+       $('#player1').html("Hi " + player1.name + " You are player 1");
+   
+}
+
+else if(key === '2'){
+      var player2 = {};
+
+      player2.name = childsnapshot.val().player2;
+      player2.wins = childsnapshot.val().wins;
+      player2.losses = childsnapshot.val().losses;
+
+
+      console.log("player1 name " + player2.name);
+      console.log("player1 name " + player2.wins);
+      console.log("player1 name " + player2.losses);
+
+      //update html with the playerName
+      $('#player2').html("Hi " + player2.name + " You are player 2");
+
+
+
+}
+})
+
 
 
 
@@ -114,92 +129,25 @@ displayName();
 //this is to keep track of connections 
 connectedRef.on("value", function(snap) {
 
-//   console.log("line 31 " + snap.val());
-//   // If they are connected..
 if (snap.val()) {
 
-//     // Add user to the connections list.
+
     var con = connectionsRef.push(true);
-
-//     // Remove user from the connection list when they disconnect.
     con.onDisconnect().remove();
-}
- });
+    }
+});
 
 
 
 
 
-//   function submitCreateAccount(){
-
-//   		var displayName = $("#add-player").val().trim();
-//   		count++;
-
-
-//       if(count ===1 ){
-//         		 database.ref("/players/" + count).set({
-//         		 	  displayName:displayName,
-//                 wins: wins1,
-//                 losses:losses1
-//                 });
-//             $(".submit").show();
-//             $(".playerName").show();
-
-//       }
-//       else {  
-//                database.ref("/players/" + count).set({
-//                 displayName:displayName,
-//                 wins: wins2,
-//                 losses:losses2
-                 
-//              });
-//               $(".submit").show();
-//               $(".playerName").show();      
-// }
-
-
-//      if(count === 2)
-//      		 	count = 0;
-
-//   }
 
 
 
-function displayName(){
-  		
 
- connectionsRef.once("value", function(snapshot){
-
-  if(snapshot.numChildren() === 1){
-      database.ref("/playersRef/"+ snapshot.numChildren()).on("value", function(snap) {
-           var player1 = snap.val().player1;
-           // $("#playerNames").empty();
-           $("#playerNames").html("Hi " + player1 + "You are player1");
-           $("#playerNames").css({'text-align':'center'});
-           $(".submit").hide();
-           $(".playerName").hide();
-
-       
-            })
-  		}
-
-else   if(snapshot.numChildren() === 2){
-      database.ref("/playersRef/" + snapshot.numChildren()).on("value", function(snap) {
-           var  player2 = snap.val().player2;
-
-           $("#playerNames").css({'text-align':'center'});
-           $("#playerNames").html("Hi " + player2 + "You are player2");
-           $(".submit").hide();
-           $(".playerName").hide();
-
-        
-        
-            })
-
-
-  }
-
-  })
-}
-
-
+//add turnRef to DB
+//On turn 1 show choices for Player 1
+//capture his click
+//show choices for player2
+//capture his click 
+//compare

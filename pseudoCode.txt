@@ -1,0 +1,49 @@
+1. Enter player name for Player 1 and submit
+2. Store the player object in the database
+3. Keep track of connectionsRef in the database
+4. Keep track of when the connections are lost , remove the entry from database
+5. Read from DB and show the value of player on the player area and Div
+
+
+1. Enter player name for Player 2 and submit
+2. Store the player object in the database
+3. Keep track of connectionsRef in the database
+4. Keep track of when the connections are lost , remove the entry from database
+5. Read from DB and show the value of the player on the player area and div
+
+
+
+once both the players enter i.e playersRef.children == 2 and turn = 1
+show choices for player 1
+
+else show choices for palyer2
+
+
+
+
+1. Adding players via web
+2. Creating players object in DB
+3. Keeping track of connections
+4. Showing choices on each players Div
+5. Clicking on choices , showing the one that was clicked, removing others
+
+
+
+order
+Once player 1 clicks on choice , the selected choice appears on the div
+Then player 2 sees his option of choices and sees taht its his turn.
+once player 2 clicks on choice, you call for resultsCheck function
+
+turn is reset to 1
+
+Chat functionality
+
+
+
+
+
+
+1. if player 1 joins and clicks submit , add his object to the database
+2. display his information on his screen
+3. Till the 2nd person joins, player1 name should be displayed on every screen.
+4. Once second person hits submit, player1 name and player2 name should be displayed on their divs area.
