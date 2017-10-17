@@ -21,9 +21,11 @@
   var connectedRef = database.ref(".info/connected");
   var playersRef = database.ref("/playersRef");
 
+  var turnRef = database.ref('/turn/');
+
   var choice = ["Rock", "Paper", "Scissors"];
 
-
+  turnRef.onDisconnect().remove();
 
 //create input text field and append to playerNames div
 var input = $("<input id=playerName type=text placeholder=Name>");
@@ -56,6 +58,9 @@ connectionsRef.once("value", function(snapshot){
 
     database.ref('/playersRef/' + snapshot.numChildren()).onDisconnect().remove();
 
+
+    $("#addPlayer").hide();
+    $("#playerName").hide();
     }
 
    if(snapshot.numChildren() === 2){
@@ -67,7 +72,10 @@ connectionsRef.once("value", function(snapshot){
           })
 
     database.ref('/playersRef/' + snapshot.numChildren()).onDisconnect().remove();
-
+  
+   
+    $("#addPlayer").hide();
+    $("#playerName").hide();
     }
 })
 
@@ -98,7 +106,7 @@ if(key === '1'){
 
        //update html with the playerName
        $('#player1').html("Hi " + player1.name + " You are player 1");
-   
+      
 }
 
 else if(key === '2'){
@@ -117,11 +125,99 @@ else if(key === '2'){
       $('#player2').html("Hi " + player2.name + " You are player 2");
 
 
+      turnRef.set(1);
+
+    
+
+
 
 }
 })
 
 
+
+turnRef.on("value", function(turn){
+
+  console.log("Line 137 " + turn.val());
+
+  if(turn.val() === 1){
+    for (var i = 0; i < choice.length; i++) {
+
+
+         console.log("choices " + choice[i]);
+         var newDiv = $('<div>');
+         newDiv.html(choice[i]);
+         newDiv.addClass('player1Choices');
+         $("#player1").append(newDiv);
+        }
+  }
+
+
+else if(turn.val() === 2){
+    for (var i = 0; i < choice.length; i++) {
+
+
+         console.log("choices " + choice[i]);
+         var newDiv = $('<div>');
+         newDiv.html(choice[i]);
+         newDiv.addClass('player2Choices');
+         $("#player2").append(newDiv);
+        }
+
+
+
+  }
+
+
+else if(turn.val() === 3){
+
+
+    //show Result
+  }
+
+
+})
+
+
+$('body').on('click', '.player1Choices', function(){
+      var player1Selection = $(this).text();
+      console.log("Line 152 " + player1Selection);
+      
+      var newDiv = $('<div>');
+      newDiv.html("Your Choice " + player1Selection);
+
+      $(".player1Choices").remove();
+      
+      // $(".player1Choices").html(newDiv);
+      $("#player1").append(newDiv);
+
+     database.ref('/playersRef/1').update({
+      choice: player1Selection
+    })
+
+     turnRef.set(2);
+      
+})
+
+
+$('body').on('click', '.player2Choices', function(){
+      var player2Selection = $(this).text();
+      console.log("Line 152 " + player2Selection);
+      
+      var newDiv = $('<div>');
+      newDiv.html("Your Choice " + player2Selection);
+      
+      $(".player2Choices").remove();
+      // $(".player2Choices").html(newDiv);
+      $("#player2").append(newDiv)
+
+     database.ref('/playersRef/2').update({
+      choice: player2Selection
+    })
+
+     turnRef.set(3);
+      
+})
 
 
 
