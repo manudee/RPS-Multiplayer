@@ -13,25 +13,25 @@
                 <div class="jumbotron">
                                 <h1>Rock Paper Scissors</h1>
                 </div>
- 
+                
                 <div class="container">
+                    <div class="row" id="playerNote"></div>
+                    <div class="row" id="turnNote"></div>
                     <div id="inputPlayer"></div>
-                    <div id="player1Info"></div>
-                    <div id="player2Info"></div>
                     <div class="row">
-                        <div id="player1" class="col-md-4 panel panel-default player1Area">
+                        <div id="player1" class="col-md-4 player1Area">
                         Waiting for Player 1
                         </div>
                         <div id="player1Choices"></div>
-                        <div id="results" class="col-md-4 panel panel-default resultsArea"></div>
-                        <div id="player2" class="col-md-4 panel panel-default player2Area">
+                        <div id="results" class="col-md-4 resultsArea"></div>
+                        <div id="player2" class="col-md-4 player2Area">
                         Waiting for Player 2
                         </div>
                         <div id="player2Choices"></div>
                     </div>
  
                 <form id="chat">
-                	<textarea  id="chatbox" type="text" class="col-md-12 panel panel-default"></textarea>
+                	<textarea  id="chatbox" type="text" class="col-md-12"></textarea>
                 	<input id="send" type="submit" class="btn btn-default btn-primary" value="send">
                 </form>
                 </div>

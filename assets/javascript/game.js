@@ -105,8 +105,8 @@ if(key === '1'){
       console.log("player1 name " + player1.losses);
 
        //update html with the playerName
-       $('#player1').html("Hi " + player1.name + " You are player 1");
-      
+       $('#player1').html("Hi " + player1.name + " You are player 1" + '<br>');
+  
 }
 
 else if(key === '2'){
@@ -122,8 +122,8 @@ else if(key === '2'){
       console.log("player1 name " + player2.losses);
 
       //update html with the playerName
-      $('#player2').html("Hi " + player2.name + " You are player 2");
-
+      $('#player2').html("Hi " + player2.name + " You are player 2" + '<br>');
+     
 
       turnRef.set(1);
 
@@ -150,6 +150,9 @@ turnRef.on("value", function(turn){
          newDiv.addClass('player1Choices');
          $("#player1").append(newDiv);
         }
+        
+        // $("#playerNote").html("Hi There! You are player " + turn.val());
+        // $("#turnNote").html("It's your Turn");
   }
 
 
@@ -163,7 +166,9 @@ else if(turn.val() === 2){
          newDiv.addClass('player2Choices');
          $("#player2").append(newDiv);
         }
-
+        
+        // $("#playerNote").html("Hi There! You are player " + turn.val());
+        // $("#turnNote").html("waiting for Player ");
 
 
   }
@@ -171,8 +176,7 @@ else if(turn.val() === 2){
 
 else if(turn.val() === 3){
 
-
-    //show Result
+    //call function to show result and update wins and losses
   }
 
 
