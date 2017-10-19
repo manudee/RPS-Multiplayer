@@ -36,16 +36,61 @@ var button = $("<button id=addPlayer value=submit type=submit>Submit</button>");
 button.addClass("btn btn-primary btn-default");
 
 
+var player;
+var otherPlayer;
+
+
 $("#inputPlayer").append(button);
 
 
+//this is to keep track of connections 
+connectedRef.on("value", function(snap) {
 
+if (snap.val()) {
+
+
+    var con = connectionsRef.push(true);
+    con.onDisconnect().remove();
+    }
+});
+
+
+
+// $(document).on('ready', function(){
+  database.ref().once('value', function(snapshot) {
+        var playerObj = snapshot.child('/playersRef/');
+        var num = playerObj.numChildren();
+        console.log("Num is " + num);
+
+        if (num === 0) {
+         
+          player = 1;
+          otherPlayer =2;
+          console.log("Line 69 " + player);
+        }
+
+
+
+})
+// })
+
+
+
+//         else if(num === 1){
+//           player =2;
+//           console.log("Line 74 " + player);
+
+//         }
+
+// })
 
 
 $('body').on("click", "#addPlayer", function(){
 
 
 connectionsRef.once("value", function(snapshot){
+
+  
 
     if(snapshot.numChildren() === 1){
           database.ref('/playersRef/' + snapshot.numChildren()).set({
@@ -57,8 +102,7 @@ connectionsRef.once("value", function(snapshot){
 
 
     database.ref('/playersRef/' + snapshot.numChildren()).onDisconnect().remove();
-
-
+    
     $("#addPlayer").hide();
     $("#playerName").hide();
     }
@@ -72,15 +116,11 @@ connectionsRef.once("value", function(snapshot){
           })
 
     database.ref('/playersRef/' + snapshot.numChildren()).onDisconnect().remove();
-  
+   
    
     $("#addPlayer").hide();
     $("#playerName").hide();
     }
-})
-
-})
-
 
 
 
@@ -88,10 +128,10 @@ playersRef.on("child_added", function(childsnapshot){
 
 
 var key = childsnapshot.key;
-
+console.log("Key " + key);
 console.log("Line 81 Key: "+ key);
 
-if(key === '1'){
+if(key === '1' ){
       var player1 = {};
 
       player1.name = childsnapshot.val().player1;
@@ -125,20 +165,22 @@ else if(key === '2'){
       $('#player2').html("Hi " + player2.name + " You are player 2" + '<br>');
      
 
-      turnRef.set(1);
-
-    
-
-
-
+    turnRef.set(1);
+    player = 2;
+    // otherPlayer =1;
+    console.log("line 104 " + player);
+      
 }
 })
 
-
+ 
 
 turnRef.on("value", function(turn){
 
   console.log("Line 137 " + turn.val());
+ console.log("line 138 " + player);
+
+console.log(" I am in turnref");
 
   if(turn.val() === 1){
     for (var i = 0; i < choice.length; i++) {
@@ -149,14 +191,16 @@ turnRef.on("value", function(turn){
          newDiv.html(choice[i]);
          newDiv.addClass('player1Choices');
          $("#player1").append(newDiv);
+         // $("#player1").css('border','4px solid yellow');
         }
         
-        // $("#playerNote").html("Hi There! You are player " + turn.val());
+        // $("#playerNote").html("Hi There! You are player " + otherPlayer);
         // $("#turnNote").html("It's your Turn");
+        // turnMessage(1);
   }
 
 
-else if(turn.val() === 2){
+else if(turn.val() === 2 ){
     for (var i = 0; i < choice.length; i++) {
 
 
@@ -165,11 +209,12 @@ else if(turn.val() === 2){
          newDiv.html(choice[i]);
          newDiv.addClass('player2Choices');
          $("#player2").append(newDiv);
+
         }
         
-        // $("#playerNote").html("Hi There! You are player " + turn.val());
+        //$("#playerNote").html("Hi There! You are player " + turn.val());
         // $("#turnNote").html("waiting for Player ");
-
+        // turnMessage(2);
 
   }
 
@@ -182,6 +227,18 @@ else if(turn.val() === 3){
 
 })
 
+
+
+// function turnMessage(turnParam){
+
+// if(turnParam === 1){
+//   $("#playerNote").html("Hi There! You are player " + turnParam);
+//   $("#turnNote").html("waiting for Player 2");
+
+// }
+
+
+// }
 
 $('body').on('click', '.player1Choices', function(){
       var player1Selection = $(this).text();
@@ -216,7 +273,7 @@ $('body').on('click', '.player2Choices', function(){
       $("#player2").append(newDiv)
 
      database.ref('/playersRef/2').update({
-      choice: player2Selection
+       choice: player2Selection
     })
 
      turnRef.set(3);
@@ -224,20 +281,9 @@ $('body').on('click', '.player2Choices', function(){
 })
 
 
+})
 
-
-//this is to keep track of connections 
-connectedRef.on("value", function(snap) {
-
-if (snap.val()) {
-
-
-    var con = connectionsRef.push(true);
-    con.onDisconnect().remove();
-    }
-});
-
-
+})
 
 
 
