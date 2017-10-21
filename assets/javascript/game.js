@@ -27,6 +27,9 @@
   var p2choice;
 
 
+  var chat = database.ref('/chat/');
+  var msg;
+
   //variables for player1 and 2 wins and losses
   player1Wins = 0;
   player1Losses = 0;
@@ -444,3 +447,4 @@ $('body').on('click', '.player2Choices', function(){
 })
  
 })
+
