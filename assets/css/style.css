@@ -5,7 +5,7 @@
  
  
  
-.player1Area,.player2Area,.resultsArea{
+#player1Section, #player2Section,.resultsArea{
  
  
                 border: 3px solid grey;
