@@ -15,3 +15,10 @@
  
 }
  
+
+ #displayChat{
+
+ 	height: 100px;
+ 	border: 3px solid red;
+ 	margin: 10px;
+ }
